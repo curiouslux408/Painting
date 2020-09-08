@@ -22,4 +22,14 @@
         app:showAsAction="never"
         android:title="Clear" />
 
+    <item
+        android:id="@+id/open"
+        app:showAsAction="never"
+        android:title="Open" />
+
+    <item
+        android:id="@+id/close"
+        app:showAsAction="never"
+        android:title="Close" />
+
 </menu>

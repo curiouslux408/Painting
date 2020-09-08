@@ -2,18 +2,11 @@ package com.example.painting;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.ContentResolver;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         paintView.init(metrics);
-
     }
 
     @Override
@@ -53,6 +45,12 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.clear:
                 paintView.clear();
+                return true;
+            case R.id.open:
+                paintView.open();
+                return true;
+            case R.id.close:
+                paintView.close();
                 return true;
         }
 

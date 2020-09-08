@@ -2,6 +2,7 @@ package com.example.painting;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -38,6 +39,7 @@ public class PaintView extends View {
     private Bitmap mBitmap;
     private Canvas mCanvas;
     private Paint mBitmapPaint = new Paint(Paint.DITHER_FLAG);
+    private boolean mStop = true;
 
     public PaintView(Context context) {
         super(context);
@@ -69,6 +71,10 @@ public class PaintView extends View {
 
         currentColor = DEFAULT_COLOR;
         strokeWidth = BRUSH_SIZE;
+
+        // 可讀取圖片位置並繪圖
+        //Bitmap bitmap = BitmapFactory.decodeFile("xxxxx");
+        //mCanvas.drawBitmap(bitmap, 0, 0, mBitmapPaint);
     }
 
     public void normal() {
@@ -88,9 +94,16 @@ public class PaintView extends View {
 
     public void clear() {
         backgroundColor = DEFAULT_BG_COLOR;
-        //paths.clear();
-        normal();
+        paths.clear();
         invalidate();
+    }
+
+    public void open() {
+        setDraw(true);
+    }
+
+    public void close() {
+        setDraw(false);
     }
 
     @Override
@@ -118,25 +131,30 @@ public class PaintView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        float x = event.getX();
-        float y = event.getY();
+        if (!mStop) {
+            // 停止繪畫
+            return false;
+        } else {
+            // 開始繪畫
+            float x = event.getX();
+            float y = event.getY();
 
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                touchStart(x, y);
-                invalidate();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                touchMove(x, y);
-                invalidate();
-                break;
-            case MotionEvent.ACTION_UP:
-                touchUp();
-                invalidate();
-                break;
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    touchStart(x, y);
+                    invalidate();
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    touchMove(x, y);
+                    invalidate();
+                    break;
+                case MotionEvent.ACTION_UP:
+                    touchUp();
+                    invalidate();
+                    break;
+            }
+            return true;
         }
-
-        return true;
     }
 
     private void touchStart(float x, float y) {
@@ -163,5 +181,9 @@ public class PaintView extends View {
 
     private void touchUp() {
         mPath.lineTo(mX, mY);
+    }
+
+    public void setDraw(boolean stop) {
+        mStop = stop;
     }
 }
